@@ -26,6 +26,7 @@ const Login = ({navigation}) => {
         formValues.usermail,
         formValues.password,
       );
+      navigation.navigate('Timeline');
 
       setLoading(false);
     } catch (error) {
@@ -35,8 +36,6 @@ const Login = ({navigation}) => {
       });
       setLoading(false);
     }
-
-    console.log(formValues);
   }
   return (
     <View style={styles.container}>
