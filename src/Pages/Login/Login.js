@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, Image} from 'react-native';
 import Button from '../../components/Button/Button';
 import Input from '../../components/TextInput/Input';
 import styles from './Login.style';
 import {Formik} from 'formik';
+import auth from '@react-native-firebase/auth';
+import {showMessage} from 'react-native-flash-message';
+import authErrorParser from '../../components/utils/authErrorParser';
 
 const initialFormValues = {
   usermail: '',
@@ -11,10 +14,28 @@ const initialFormValues = {
 };
 
 const Login = ({navigation}) => {
+  const [loading, setLoading] = useState(false);
+
   const handleSignUp = () => {
     navigation.navigate('Sign up');
   };
-  function handleFormSubmit(formValues) {
+  async function handleFormSubmit(formValues) {
+    try {
+      setLoading(true);
+      await auth().signInWithEmailAndPassword(
+        formValues.usermail,
+        formValues.password,
+      );
+
+      setLoading(false);
+    } catch (error) {
+      showMessage({
+        message: authErrorParser(error.code),
+        type: 'danger',
+      });
+      setLoading(false);
+    }
+
     console.log(formValues);
   }
   return (
@@ -30,16 +51,17 @@ const Login = ({navigation}) => {
         {({values, handleChange, handleSubmit}) => (
           <>
             <Input
+              onChangeText={handleChange('usermail')}
               value={values.usermail}
-              onType={handleChange('usermail')}
               placeholder="Enter your e-mail..."
             />
             <Input
+              onChangeText={handleChange('password')}
               value={values.password}
-              onType={handleChange('password')}
               placeholder="Enter your password..."
+              secureTextEntry
             />
-            <Button text={'Log in'} onPress={handleSubmit} />
+            <Button text={'Log in'} onPress={handleSubmit} loading={loading} />
           </>
         )}
       </Formik>

@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import FlashMessage from 'react-native-flash-message';
 
 import Login from './Pages/Login/Login';
 import Sign from './Pages/Sign/Sign';
@@ -23,6 +24,7 @@ const Router = () => {
         <Stack.Screen name="Auth Stack" component={AuthStack} />
         {/* <Stack.Screen name="Sign up" component={Sign} /> */}
       </Stack.Navigator>
+      <FlashMessage position="top" />
     </NavigationContainer>
   );
 };
