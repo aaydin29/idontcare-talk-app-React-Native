@@ -18,10 +18,8 @@ const Timeline = () => {
       .ref('messages/')
       .on('value', snapshot => {
         const contentData = snapshot.val();
-        if (!contentData) {
-          return;
-        }
-        const parsedData = parseContentData(contentData);
+
+        const parsedData = parseContentData(contentData || {});
         setContentList(parsedData);
       });
   }, []);
